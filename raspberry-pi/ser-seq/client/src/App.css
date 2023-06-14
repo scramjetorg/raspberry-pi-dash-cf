@@ -1,0 +1,33 @@
+:root {
+    --background-container: #ffffff;
+    --background: #f0f4f8;
+    --shadow-box: #dbdbdb;
+}
+
+.content {
+    background-color: var(--background);
+    border-radius: 10px;
+    width: 80%;
+    min-height: 40em;
+    padding: 1rem 3rem;
+    margin: 3rem auto;
+}
+
+.container {
+    background: var(--background-container);
+    box-shadow: 0 1px 4px var(--shadow-box);
+    display: flex;
+    border-radius: 8px;
+    min-height: 35em;
+    margin: 3rem auto;
+    padding: 1rem 3rem;
+    flex-direction: column;
+}
+
+@media screen and (min-width: 1024px) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+

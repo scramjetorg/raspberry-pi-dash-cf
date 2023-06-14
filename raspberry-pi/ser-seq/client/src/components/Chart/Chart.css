@@ -1,0 +1,36 @@
+:root {
+    --background-container: #ffffff;
+    --background-header: #f0f0f0;
+    --shadow-box: #dbdbdb;
+    --text: #002849;
+}
+
+.chartContainer {
+    background: var(--background-container);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px var(--shadow-box);
+    font-family: "Jost", Arial, Helvetica, sans-serif;
+    min-height: 25em;
+    min-width: 30%;
+    width: auto;
+    margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 1024px) {
+    .chartContainer {
+        margin: 3rem auto;
+    }
+}
+
+.chartContainer h2 {
+    color: var(--text);
+    background: var(--background-header);
+    margin: 0;
+    padding: 1rem;
+    width: 50%;
+    border-radius: 6px 0 40px 0;
+}
+
+.chart {
+   padding: 5rem 2rem;
+}

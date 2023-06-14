@@ -1,0 +1,8 @@
+{
+  "name": "@scramjet/raspberry-pi-monitoring-sample",
+  "scripts": {
+    "build-rpi-seq": "cd raspberry-pi/rpi-seq && npm i && npm run build",
+    "build-ser-seq": "cd raspberry-pi/ser-seq && npm i && npm run build",
+    "build": "npm run build-rpi-seq && npm run build-ser-seq"
+  }
+}

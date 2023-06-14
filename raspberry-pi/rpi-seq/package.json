@@ -1,0 +1,29 @@
+{
+  "name": "@scramjet/raspberry",
+  "version": "0.0.1",
+  "main": "raspberry.py",
+  "author": "mcdominik",
+  "license": "GPL-3.0",
+  "description": "raspberry pi internal parameters fetcher example",
+  "keywords": [
+    "raspberry",
+    "python",
+    "gpiozero",
+    "topics"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scramjetorg/raspberry-pi-dash"
+  },
+  "engines": {
+    "python3": "3.8.0"
+  },
+  "scripts": {
+    "build": "mkdir -p dist/__pypackages__/ && pip3 install -t dist/__pypackages__/ -r requirements.txt && cp raspberry.py package.json ./dist/",
+    "pack" : "si seq pack dist",
+    "clean": "rm -rf ./dist"
+  },
+  "dependencies": {
+    "@scramjet/api-client": "0.32.1"
+  }
+}

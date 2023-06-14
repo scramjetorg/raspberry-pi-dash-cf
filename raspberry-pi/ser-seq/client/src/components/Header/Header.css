@@ -1,0 +1,9 @@
+:root {
+    --text: #002849;
+}
+.header {
+    color: var(--text);
+    font-family: "Jost", Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    margin: 0;
+}
