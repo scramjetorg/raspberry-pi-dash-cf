@@ -11,12 +11,12 @@ const DiskUsage = ({ diskData }) => {
             {
                 data: diskData.map((data) => data),
                 backgroundColor: [
-                    "rgba(230, 130, 15, 0.721)",
-                    "rgba(230, 130, 15, 0.3)",
+                    "#ff8000ff",
+                    "#ff800000",
                 ],
                 borderColor: [
-                    "rgb(230,128,15)",
-                    "rgba(230, 130, 15, 0.2)",
+                    "#ff800020",
+                    "#ff8000ff",
                 ],
                 borderWidth: 1,
             },
@@ -24,6 +24,7 @@ const DiskUsage = ({ diskData }) => {
     };
     const options = {
         maintainAspectRatio: false,
+        color: "#fff",
         plugins: {
             tooltip: {
                 title: "CPU",

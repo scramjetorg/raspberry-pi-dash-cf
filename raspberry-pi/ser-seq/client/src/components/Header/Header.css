@@ -1,8 +1,8 @@
 :root {
-    --text: #002849;
+    --header: #1ca6b5;
 }
 .header {
-    color: var(--text);
+    color: var(--header);
     font-family: "Jost", Arial, Helvetica, sans-serif;
     font-weight: 600;
     margin: 0;

@@ -12,8 +12,9 @@ var disk = 0;
 var cpu = 0;
 const tempArray = [];
 
+
 const socket = new WebSocket(
-    "wss://" + window.location.host,
+    `${window.location.protocol === "https:" ? "wss" : "ws" }://${window.location.host}`,
     "protocolOne"
 );
 
@@ -40,10 +41,10 @@ function App() {
 
     return (
         <div className="content">
-        <Header title="Raspberry-pi dash" className="header"/>
+        <Header title="RaspberryPi Stats" className="header"/>
         <div className="container">
             <Chart title="CPU Usage" chart={<CpuUsage CPUData={[parseFloat(cpu), 100-parseFloat(cpu)]}/>}/>
-            <Chart title="Temperature" chart={<Temperature tempData={tempArray} />} />
+            <Chart title="CPU Temperature" chart={<Temperature tempData={tempArray} />} />
             <Chart title="Disk Usage" chart={<DiskUsage diskData={[parseFloat(disk), 100-parseFloat(disk)]}/>}/>
         </div>
         </div>

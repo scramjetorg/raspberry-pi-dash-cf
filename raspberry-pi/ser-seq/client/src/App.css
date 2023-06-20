@@ -1,26 +1,47 @@
 :root {
     --background-container: #ffffff;
-    --background: #f0f4f8;
+    --background: #004161;
     --shadow-box: #dbdbdb;
 }
 
+#root {
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+}
+
+html, body {
+    display: block;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(45deg, #014781, #002849);
+    display: block;
+    height: 100vh;
+    overflow: auto;
+}
+
 .content {
-    background-color: var(--background);
+    /* background-color: var(--background); */
     border-radius: 10px;
     width: 80%;
-    min-height: 40em;
     padding: 1rem 3rem;
-    margin: 3rem auto;
+    margin: 3rem auto 4rem;
+    padding: 0;
 }
 
 .container {
-    background: var(--background-container);
-    box-shadow: 0 1px 4px var(--shadow-box);
+    /* box-shadow: 0 1px 4px var(--shadow-box); */
+    justify-content: space-between;
     display: flex;
     border-radius: 8px;
     min-height: 35em;
-    margin: 3rem auto;
-    padding: 1rem 3rem;
+    margin: 0 auto;
+    padding: 0;
     flex-direction: column;
 }
 

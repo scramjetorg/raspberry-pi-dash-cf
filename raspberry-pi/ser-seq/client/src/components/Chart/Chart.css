@@ -1,25 +1,19 @@
 :root {
-    --background-container: #ffffff;
-    --background-header: #f0f0f0;
+    --background-container: #00cfcd47;
+    --background-header: #ff8000;
     --shadow-box: #dbdbdb;
-    --text: #002849;
+    --text: #fff;
 }
 
 .chartContainer {
-    background: var(--background-container);
+    background: #011c31;
     border-radius: 6px;
-    box-shadow: 0 1px 4px var(--shadow-box);
+    /* box-shadow: 0 1px 4px var(--shadow-box); */
     font-family: "Jost", Arial, Helvetica, sans-serif;
     min-height: 25em;
-    min-width: 30%;
-    width: auto;
-    margin-bottom: 2rem;
-}
 
-@media screen and (min-width: 1024px) {
-    .chartContainer {
-        margin: 3rem auto;
-    }
+    margin: 1rem 0;
+
 }
 
 .chartContainer h2 {
@@ -33,4 +27,10 @@
 
 .chart {
    padding: 5rem 2rem;
+}
+
+@media screen and (min-width: 1024px) {
+    .chartContainer {
+        width: calc(33.33% - .5rem);
+    }
 }

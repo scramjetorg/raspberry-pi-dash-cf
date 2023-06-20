@@ -3,7 +3,9 @@ const ws = require('ws');
 const fs = require("fs");
 
 const location = path.dirname(process.env.SEQUENCE_PATH);
+const CLOUDFLARED_DIR = path.join(location, ".cloudflared");
 
+// reinstall dependencies
 const npmi = require("child_process").spawn("npm", ["ci"], { cwd: location });
 
 npmi.stdout.pipe(process.stdout);
@@ -22,18 +24,22 @@ async function tunnelSetup(tunnelCredsFilename) {
 
     console.log("cloudflared installed.");
 
-    const { child } = tunnel({
+    const params = {
         "--url": "localhost:" + port,
         "--credentials-file": `${location}/.cloudflared/${tunnelCredsFilename}`,
         "run": null
-    });
+    }
+
+    params[tunnelCredsFilename.substr(0, tunnelCredsFilename.lastIndexOf('.'))] = null;
+
+    const { child } = tunnel(params);
 
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stderr);
 }
 
 function getTunnelCredsFilename() {
-    const tunnelCredsFile = fs.readdirSync(`${location}/.cloudflared`, { withFileTypes: true })
+    const tunnelCredsFile = fs.readdirSync(CLOUDFLARED_DIR, { withFileTypes: true })
         .filter(item => !item.isDirectory())
         .find(item => path.extname(item.name) === ".json");
 
@@ -56,7 +62,7 @@ module.exports = [
         async function reader() {
             for await (const chunk of input) {
                 try {
-                    if (wsServer.clients.length === 0) await new Promise(res => wsServer.once("connection", res))
+                    if (wsServer.clients.length === 0) await new Promise(res => wsServer.once("connection", res));
 
                     wsServer.clients.forEach(function (client) {
                         client.send(JSON.stringify(chunk));
@@ -71,8 +77,9 @@ module.exports = [
         wsServer.on('connection', socket => {
             console.log("connected");
             socket.on('message', message => console.log('server recevied: %s', message));
-            reader();
         });
+
+        reader();
 
         const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 
@@ -85,7 +92,7 @@ module.exports = [
         app.use(express.static(reactBuild));
         app.get("*", async (req, res) => {
             res.sendFile(path.join(reactBuild, "index.html"));
-        })
+        });
 
         await tunnelSetup(getTunnelCredsFilename());
 

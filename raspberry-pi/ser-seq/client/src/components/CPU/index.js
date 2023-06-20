@@ -11,12 +11,12 @@ const CpuUsage = ({ CPUData }) => {
             {
                 data: CPUData.map((data) => data),
                 backgroundColor: [
-                    "rgba(23, 112, 201, 0.8)",
-                    "rgba(23, 112, 201, 0.3)",
+                    "#ff8000ff",
+                    "#ff800000",
                 ],
                 borderColor: [
-                    "rgb(23, 112, 201, 255)",
-                    "rgba(23, 112, 201, 0.4)",
+                    "#ff800020",
+                    "#ff8000ff",
                 ],
                 borderWidth: 1,
             },
@@ -24,6 +24,7 @@ const CpuUsage = ({ CPUData }) => {
     };
     const options = {
         maintainAspectRatio: false,
+        color: "#fff",
         plugins: {
             tooltip: {
                 title: "CPU",

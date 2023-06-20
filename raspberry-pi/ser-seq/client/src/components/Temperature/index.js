@@ -25,29 +25,35 @@ const Temperature = ({ tempData }) => {
     const options = {
         maintainAspectRatio: false,
         scales: {
-    y:
-      {
-        min: 36,
-        max: 50,
-        stepSize: 1,
-      }
-  },
+            y: {
+                min: 40,
+                max: 60,
+                stepSize: 1,
+            },
+        },
+        color: "#fff",
+        grid: {
+            color: "#fff"
+        }
     };
-    const labels = ["", "", "", "", "", "", ""];
+    const labels = ["-6s", "-5s", "-4s", "-3s", "-2s", "-1s", "0"];
     const data = {
         labels,
         datasets: [
             {
-                label: "CPU Temperature [C\u00B0]",
+                label: "CPU Temperature °C ",
                 data: tempData.map((data) => data),
-                borderColor: "rgba(23, 112, 201, 0.9)",
-                backgroundColor: "rgba(23, 112, 201, 0.8)",
+                borderColor: "#ff8000ff",
+                backgroundColor: "#ff8000ff",
+                pointStyle: 'circle',
+                pointRadius: 10,
+                pointHoverRadius: 15
             }
-        ],
+        ]
     };
 
     return (
-        <Line data={data} options={options} width={"60%"} height="300px"/>
+        <Line data={data} options={options} width={"60%"} height="400px"/>
     );
 };
 
