@@ -26,11 +26,13 @@ async function tunnelSetup(tunnelCredsFilename) {
 
     const params = {
         "--url": "localhost:" + port,
-        "--credentials-file": `${location}/.cloudflared/${tunnelCredsFilename}`,
         "run": null
     }
 
-    params[tunnelCredsFilename.substr(0, tunnelCredsFilename.lastIndexOf('.'))] = null;
+    if (tunnelCredsFilename) {
+        params["--credentials-file"] = `${location}/.cloudflared/${tunnelCredsFilename}`;
+        params[tunnelCredsFilename.substr(0, tunnelCredsFilename.lastIndexOf('.'))] = null;
+    }
 
     const { child } = tunnel(params);
 
@@ -43,7 +45,7 @@ function getTunnelCredsFilename() {
         .filter(item => !item.isDirectory())
         .find(item => path.extname(item.name) === ".json");
 
-    return tunnelCredsFile.name;
+    return tunnelCredsFile && tunnelCredsFile.name;
 }
 
 module.exports = [
@@ -61,17 +63,11 @@ module.exports = [
 
         async function reader() {
             for await (const chunk of input) {
-                try {
-                    //if (wsServer.clients.length === 0) await new Promise(res => wsServer.once("connection", res));
-
-                    wsServer.clients.forEach(function (client) {
-                        client.send(JSON.stringify(chunk), (err) => {
-                            if (err) console.error(err);
-                        });
+                wsServer.clients.forEach(function (client) {
+                    client.send(JSON.stringify(chunk), (err) => {
+                        if (err) console.error(err);
                     });
-                } catch (e) {
-                    console.error(e);
-                }
+                });
             }
         }
 
