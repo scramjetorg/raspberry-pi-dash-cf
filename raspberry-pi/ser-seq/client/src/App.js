@@ -5,11 +5,13 @@ import Temperature from "./components/Temperature";
 import Chart from "./components/Chart";
 import { useState } from "react";
 import './App.css'
-
+import logo from "./assets/scp-logo.png";
 
 var temp = 0;
 var disk = 0;
 var cpu = 0;
+var platform = "";
+
 const tempArray = [];
 
 
@@ -30,6 +32,7 @@ function App() {
         temp = hold.cpu_temp;
         disk = hold.disk_usage;
         cpu = hold.load_avg;
+        platform = hold.platform;
 
         if (tempArray.length < 7 && !isNaN(temp)) {
             tempArray.push(temp);
@@ -41,12 +44,13 @@ function App() {
 
     return (
         <div className="content">
-        <Header title="RaspberryPi Stats" className="header"/>
-        <div className="container">
-            <Chart title="CPU Usage" chart={<CpuUsage CPUData={[parseFloat(cpu), 100-parseFloat(cpu)]}/>}/>
-            <Chart title="CPU Temperature" chart={<Temperature tempData={tempArray} />} />
-            <Chart title="Disk Usage" chart={<DiskUsage diskData={[parseFloat(disk), 100-parseFloat(disk)]}/>}/>
-        </div>
+            <Header title={"RaspberryPi: " + platform} className="header"/>
+            <div className="container">
+                <Chart title="CPU Usage" chart={<CpuUsage CPUData={[parseFloat(cpu), 100-parseFloat(cpu)]}/>}/>
+                <Chart title="CPU Temperature" chart={<Temperature tempData={tempArray} />} />
+                <Chart title="Disk Usage" chart={<DiskUsage diskData={[parseFloat(disk), 100-parseFloat(disk)]}/>}/>
+            </div>
+            <div className="powered"><a href="https://scramjet.org">Powered by Scramjet Cloud Platform <img alt="Scramjet Cloud Platform" src={logo}/></a></div>
         </div>
     );
 }

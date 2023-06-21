@@ -62,14 +62,15 @@ module.exports = [
         async function reader() {
             for await (const chunk of input) {
                 try {
-                    if (wsServer.clients.length === 0) await new Promise(res => wsServer.once("connection", res));
+                    //if (wsServer.clients.length === 0) await new Promise(res => wsServer.once("connection", res));
 
                     wsServer.clients.forEach(function (client) {
-                        client.send(JSON.stringify(chunk));
+                        client.send(JSON.stringify(chunk), (err) => {
+                            if (err) console.error(err);
+                        });
                     });
-                }
-                catch {
-                    await new Promise(res => setTimeout(res, 1000));
+                } catch (e) {
+                    console.error(e);
                 }
             }
         }
