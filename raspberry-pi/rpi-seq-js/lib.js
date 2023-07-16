@@ -6,13 +6,33 @@ let _piTimer = null;
 
 const lib = module.exports = {
     getTimer() {
-        return _piTimer = _piTimer || lib.timer(40);
+        return _piTimer = _piTimer || lib.timer(20);
     },
     async forever() {
         return unresolved;
     },
-    dht(pin1, pin2) {
+    dht(type, pin) {
+        let reading = false;
+        let lastValue;
+        const read = async () => {
+            if (reading) return lastValue;
 
+            while (true) {
+                const val = await new Promise(res => dht.read(
+                    type, pin,
+                    (err, temperature, humidity) => err ? res() : res({temperature, humidity})
+                ));
+                if (val) return lastValue = val;
+            }
+        }
+
+        return {
+            read: async () => {
+                if (!lastValue) return read();
+                read();
+                return lastValue;
+            }
+        }
     },
     led(pin, initState = 0) {
         const time = lib.getTimer();
@@ -36,15 +56,18 @@ const lib = module.exports = {
             off: async () => time.queue().then(() => write(0)),
         }
     },
-    change(iterable) {
-        return (function* () {
+    changes(_iterable, ...args) {
+        const iterable = typeof _iterable === "function" ? _iterable(...args) : _iterable;
+
+        return (async function* () {
             let lastChunk = "";
-            for (const chunk of iterable) {
+            for await (const chunk of iterable) {
                 const chunkString = Object.entries(chunk).map(x => `${x}`).sort().join(";");
-                if (lastChunk !== chunkString) yield chunk;
+                if (lastChunk !== chunkString) 
+                    yield chunk;
                 lastChunk = chunkString;
             }
-        });
+        })();
     },
     noop: () => 0,
     timer(initialInterval = 1000) {

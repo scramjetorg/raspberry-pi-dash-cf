@@ -3,9 +3,9 @@ const { inspect } = require("util");
 
 module.exports = [
     { requires: "pi-control", contentType: "text/plain" },
-    async function* (input, ledGpio = "14") {
-        const { timer, led } = require("./lib");
-        const int = timer(1000);
+    async function(input, ledGpio = "14", dhtGpio = "17") {
+        const { timer, led, dht, changes } = require("./lib");
+        const int = timer(100);
 
         // Initialize leds
         const leds = {
@@ -44,15 +44,28 @@ module.exports = [
             }
         })();
 
-        this.logger.info("Initializing output");
+        this.logger.info(`Initializing output from dht(11, ${+dhtGpio})`);
+
+        const ht = dht(11, +dhtGpio)
 
         // generate output
-        while (true) {
-            yield {
-                ts: Date.now(),
-                ...Object.fromEntries(Object.entries(leds).map(([k, v]) => [`led:${k}`, v.value]))
-            }
-            await int.next();
-        }
+        return Object.assign(
+            changes(async function*() { 
+                let data;
+                while (true) {
+                    try {
+                        data = await ht.read();
+                    } catch {}
+
+                    yield {
+                        ...Object.fromEntries(Object.entries(leds).map(([k, v]) => [`led:${k}`, v.value])),
+                        ...data
+                    };
+
+                    await int.next();
+                }
+            }),
+            {topic: "pi-measurement", contentType: "text/x-ndjson"}
+        );
     }
 ]
