@@ -1,0 +1,28 @@
+:root {
+    --background-color: #ddd;
+    --shadow-box: #dbdbdb;
+    --text: #000;
+    --no-color: #aaa;
+    --on-color: #3a3;
+    --off-color: #a33;
+}
+.onoff {
+    color: var(--text);
+    background: var(--background-color);
+    padding: 5rem 2rem;
+    margin: 0;
+    padding: 1rem;
+    width: 50%;
+    border-radius: 8px;
+    border: 4px solid var(--no-color);
+    box-shadow: 0 2px 5px var(--button-shadow);
+}
+
+.onoff-on {
+    border-color: var(--on-color)
+}
+
+.onoff-off {
+    border-color: var(--off-color)
+}
+

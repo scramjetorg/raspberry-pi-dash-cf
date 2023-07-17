@@ -3,29 +3,25 @@
     --background-header: #ff8000;
     --shadow-box: #dbdbdb;
     --text: #fff;
+    --button-color: #ccc;
+    --button-color-clicked: #fff;
+    --button-shadow: #333;
 }
 
-.chartContainer {
-    background: #011c31;
-    border-radius: 6px;
-    /* box-shadow: 0 1px 4px var(--shadow-box); */
-    font-family: "Jost", Arial, Helvetica, sans-serif;
-    min-height: 10em;
-
-    margin: 1rem 0;
-}
-
-.chartContainer h2 {
+.button {
     color: var(--text);
     background: var(--background-header);
+    padding: 5rem 2rem;
     margin: 0;
     padding: 1rem;
     width: 50%;
-    border-radius: 6px 0 40px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px var(--button-shadow);
 }
 
-.chart {
-   padding: 5rem 2rem;
+.button:hover {
+    margin: 1px 0 0 1px;
+    box-shadow: 0 1px 4px var(--button-shadow);
 }
 
 @media screen and (min-width: 1024px) {

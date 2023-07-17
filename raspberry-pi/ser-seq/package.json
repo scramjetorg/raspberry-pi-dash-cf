@@ -7,7 +7,7 @@
     "build-app": "cd client && npm i && npm run build",
     "build": "npm run build-app && npm run build-seq",
     "build-seq": "mkdir -p dist/ && cp index.js package.json dist/ && (cd dist && npm i --omit=dev)",
-    "postbuild": "mkdir -p dist/public && cp client/build/** dist/public -r && cp .cloudflared dist -r"
+    "postbuild": "mkdir -p dist/public && cp client/build/** dist/public -r && if [ -e '.cloudflared' ]; then cp .cloudflared dist -r; fi"
   },
   "engines": {
     "node": ">=16"
@@ -26,6 +26,6 @@
     "express" : "*",
     "express-ws" : "*",
     "http" : "*",
-    "cloudflared": "0.4.0"
+    "cloudflared": "^0.4.0"
   }
 }

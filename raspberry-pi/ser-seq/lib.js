@@ -67,6 +67,9 @@ module.exports = [
             provides: controlTopic, 
             contentType: "text/plain"
         };
+        const emitter = new EventEmitter();
+
+        setInterval(() => emitter.emit("tick"), 1000);
 
         // wait for `npm i` finish
         await new Promise((res, rej) => {
