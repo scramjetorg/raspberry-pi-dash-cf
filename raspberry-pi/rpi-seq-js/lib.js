@@ -1,10 +1,16 @@
 const { EventEmitter } = require("events");
-const { onoff: { Gpio }, "node-dht-sensor": dht } = require("./rebuild");
 
 const unresolved = new Promise(() => 0);
 let _piTimer = null;
+let Gpio;
+let dht;
 
 const lib = module.exports = {
+    initialize() {
+        const { onoff: { Gpio: _Gpio }, "node-dht-sensor": _dht } = require("./rebuild");
+        Gpio = _Gpio;
+        dht = _dht;
+    },
     getTimer() {
         return _piTimer = _piTimer || lib.timer(20);
     },
@@ -64,7 +70,7 @@ const lib = module.exports = {
             for await (const chunk of iterable) {
                 const chunkString = Object.entries(chunk).map(x => `${x}`).sort().join(";");
                 if (lastChunk !== chunkString) 
-                    yield chunk;
+                    yield { ts: Date.now(), ...chunk };
                 lastChunk = chunkString;
             }
         })();

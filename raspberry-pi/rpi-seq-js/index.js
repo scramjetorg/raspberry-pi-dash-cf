@@ -1,18 +1,26 @@
 const { createInterface } = require("readline/promises");
 const { inspect } = require("util");
+const { timer, led, dht, changes, defer, initialize } = require("./lib");
+const os = require("os");
+
+const platform = `${os.hostname()} (${os.platform()} ${os.machine()} ${os.cpus().length} threads`;
 
 module.exports = [
     { requires: "pi-control", contentType: "text/plain" },
     async function(input, ledGpio = "14", dhtGpio = "17") {
-        const { timer, led, dht, changes } = require("./lib");
+        this.logger.info("Loading libraries...");
+        await defer(10);
+        
+        initialize();
+
         const int = timer(100);
+
+        this.logger.info("Initializing input reader");
 
         // Initialize leds
         const leds = {
             red: led(+ledGpio)
         };
-
-        this.logger.info("Initializing input reader");
 
         // Input reader
         (async () => {
@@ -58,6 +66,7 @@ module.exports = [
                     } catch {}
 
                     yield {
+                        platform,
                         ...Object.fromEntries(Object.entries(leds).map(([k, v]) => [`led:${k}`, v.value])),
                         ...data
                     };

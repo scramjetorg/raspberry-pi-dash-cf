@@ -1,0 +1,22 @@
+{
+  "name": "@scramjet/passthrough",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "predeploy": "mkdir -p dist/ && cp index.js package.json dist/ && (cd dist && npm i --omit=dev)"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme",
+  "author": "",
+  "license": "ISC"
+}
