@@ -1,8 +1,15 @@
 {
   "name": "@scramjet/raspberry-pi-monitoring-sample",
   "scripts": {
-    "build-rpi-seq": "cd raspberry-pi/rpi-seq && npm i && npm run build",
-    "build-ser-seq": "cd raspberry-pi/ser-seq && npm i && npm run build",
-    "build": "npm run build-rpi-seq && npm run build-ser-seq"
+    "postinstall": "CWD=$PWD find raspberry-pi/ scp/ -mindepth 1 -maxdepth 2 -iname package.json -execdir npm install \\;",
+    "build-all": "CWD=$PWD find raspberry-pi/ scp/ -mindepth 1 -maxdepth 2 -iname package.json -execdir npm run build \\;",
+    "build-rpi-seq": "cd raspberry-pi/rpi-seq-js && npm run build",
+    "build-ser-seq": "cd raspberry-pi/ser-seq && npm run build",
+    "build": "npm run build-all",
+    "prestart": "CWD=$PWD find raspberry-pi/ scp/ -mindepth 1 -maxdepth 2 -iname dist -type d -execdir bash -c 'cp -rp ./dist $CWD/dist/$(basename $(readlink -f .))' \\;",
+    "start": "sth -E -D dist/ --runtime-adapter=process"
+  },
+  "devDependencies": {
+    "@scramjet/sth": "^0.35.0"
   }
 }

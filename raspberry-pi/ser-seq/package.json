@@ -6,7 +6,8 @@
   "scripts": {
     "build-app": "cd client && npm i && npm run build",
     "build": "npm run build-app && npm run build-seq",
-    "build-seq": "mkdir -p dist/ && cp index.js package.json dist/ && (cd dist && npm i --omit=dev)",
+    "deploy": "si seq deploy dist/",
+    "build-seq": "mkdir -p dist/ && cp index.js lib.js package.json dist/ && (cd dist && npm i --omit=dev)",
     "postbuild": "mkdir -p dist/public && cp client/build/** dist/public -r && if [ -e '.cloudflared' ]; then cp .cloudflared dist -r; fi"
   },
   "engines": {
