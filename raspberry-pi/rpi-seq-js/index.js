@@ -1,79 +1,44 @@
-const { createInterface } = require("readline/promises");
-const { inspect } = require("util");
-const { timer, led, dht, changes, defer, initialize } = require("./lib");
-const os = require("os");
-
-const platform = `${os.hostname()} (${os.platform()} ${os.machine()} ${os.cpus().length} threads`;
+const { platform, hostname, network, led, dht, changes, initialize, readStreamFromSources, readCommandLines, getTimer } = require("./lib");
 
 module.exports = [
     { requires: "pi-control", contentType: "text/plain" },
-    async function(input, ledGpio = "14", dhtGpio = "17") {
+    async function(input, dhtGpio = "14", redGpio = "22", ylwGpio = "27", grnGpio = "17") {
         this.logger.info("Loading libraries...");
-        await defer(10);
-        
-        initialize();
 
-        const int = timer(100);
+        await initialize();
 
-        this.logger.info("Initializing input reader");
+        this.logger.info(`Initializing leds on pins:`, {redGpio, ylwGpio, grnGpio});
 
         // Initialize leds
         const leds = {
-            red: led(+ledGpio)
+            red: led(+redGpio, "red led"),
+            ylw: led(+ylwGpio, "ylw led"),
+            grn: led(+grnGpio, "grn led")
         };
 
-        // Input reader
-        (async () => {
-            const rl = createInterface({ input })
-            for await (const message of rl) {
-                try {
-                    this.logger.info("Got message", message);
-                    const [type, obj, value] = message.trim().split(':');
-
-                    switch(type) {
-                        case "led": 
-                            if (!leds[obj]) {
-                                this.logger.warn("Invalid led name", obj);
-                                continue;
-                            }
-                            if (typeof leds[obj][value] === "function") {
-                                await leds[obj][value]();
-                                this.logger.info(`Set state of led ${obj} to ${leds[obj].value} on pin ${leds[obj].pin}`);
-                                continue;
-                            }
-                            this.logger.info(`No such function ${value}`, inspect(leds[obj]), {type, obj, value}, typeof leds[obj][value])
-                            break;
-                        default:
-                            this.logger.warn("Unknown message type", type);
-                    }
-                } catch(e) {
-                    this.logger.warn("error", e.stack);
-                }
-            }
-        })();
-
-        this.logger.info(`Initializing output from dht(11, ${+dhtGpio})`);
+        this.logger.info(`Initializing dht(11, ${+dhtGpio})`);
 
         const ht = dht(11, +dhtGpio)
 
+        this.logger.info("Initializing input commands");
+
+        readCommandLines(input, async (type, obj, value) => {
+            if (type !== "led") this.logger.warn(`Unknown command ${type}`);
+            if (!leds[obj]) this.logger.warn(`Led ${obj} is not one of: [${Object.keys(leds).join(",")}]`);
+            if (!leds[obj][value]) this.logger.warn(`Led ${obj} does not support command ${value}`);
+
+            await leds[obj][value]();
+            this.logger.info(`Called ${obj}..${value}`);
+        });
+
+        this.logger.info("Intializing output");
+
         // generate output
         return Object.assign(
-            changes(async function*() { 
-                let data;
-                while (true) {
-                    try {
-                        data = await ht.read();
-                    } catch {}
-
-                    yield {
-                        platform,
-                        ...Object.fromEntries(Object.entries(leds).map(([k, v]) => [`led:${k}`, v.value])),
-                        ...data
-                    };
-
-                    await int.next();
-                }
-            }),
+            changes(readStreamFromSources(
+                [ht, leds.grn, leds.ylw, leds.red],
+                { platform, hostname, network }
+            )),
             {topic: "pi-measurement", contentType: "text/x-ndjson"}
         );
     }
