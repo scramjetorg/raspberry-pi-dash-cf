@@ -1,9 +1,9 @@
 const { PassThrough } = require("stream");
 
 module.exports = [
-	{ requires: "pi-measurement", contentType: "text/plain" },
+	{ requires: "pi-measurement", contentType: "text/x-ndjson" },
 	async function (input) {
-		const out = input.pipe(new PassThrough({ encoding: "utf-8" }));
+		const out = input.pipe(new PassThrough({ objectMode: true }));
 
 		out.on("drain", () => { this.logger.info("drained"); });
 		out.on("pause", () => { this.logger.info("paused"); });
