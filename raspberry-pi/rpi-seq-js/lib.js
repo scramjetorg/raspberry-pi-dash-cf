@@ -31,6 +31,8 @@ const hostname = os.hostname();
 /** @type {Promise<void>} */
 let initialized = null;
 
+const gpios = {};
+
 const lib = module.exports = {
     async initialize() {
         if (initialized) return initialized;
@@ -86,7 +88,29 @@ const lib = module.exports = {
             }
         }
     },
+    button(pin, name = "btn") {
+        if (gpios[pin]) return gpios[pin];
+
+        const btn = new Gpio(pin, 'in', 'both');
+        let value = 0;
+        
+        btn.watch((err, val) => {
+            if (!err) { value = val };
+        });
+
+        process.on("beforeExit", () => {
+            btn.unexport();
+        })
+
+        return {
+            pin,
+            get value() { return value; },
+            async read() { return { [name]: value }; }
+        };
+    },
     led(pin, name = "led", initState = 0) {
+        if (gpios[pin]) return gpios[pin];
+
         const led = new Gpio(pin, 'out');
         let value = initState;
 
@@ -96,6 +120,11 @@ const lib = module.exports = {
             await led.write(value);
             return value;
         }
+
+        process.on("beforeExit", () => {
+            led.writeSync(0);
+            led.unexport();
+        })
 
         return {
             pin,

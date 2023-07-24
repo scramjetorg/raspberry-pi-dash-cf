@@ -1,11 +1,11 @@
 {
   "name": "@scramjet/pi-reader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "mkdir -p dist/ && cp index.js lib.js package.json dist/ && (cd dist && npm i --omit=dev)",
-    "predeploy": "mkdir -p dist/ && cp index.js package.json dist/ && (cd dist && npm i --omit=dev)"
+    "build": "mkdir -p dist/ && cp index.js lib.js rebuild.js package.json dist/ && (cd dist && npm i --omit=dev)",
+    "predeploy": "mkdir -p dist/ && cp index.js lib.js rebuild.js package.json dist/ && (cd dist && npm i --omit=dev)"
   },
   "engines": {
     "node": ">=16"

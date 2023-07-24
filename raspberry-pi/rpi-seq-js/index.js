@@ -1,8 +1,8 @@
-const { platform, hostname, network, led, dht, changes, initialize, readStreamFromSources, readCommandLines, getTimer } = require("./lib");
+const { platform, hostname, network, led, dht, changes, initialize, readStreamFromSources, readCommandLines, getTimer, button } = require("./lib");
 
 module.exports = [
     { requires: "pi-control", contentType: "text/plain" },
-    async function(input, dhtGpio = "14", redGpio = "22", ylwGpio = "27", grnGpio = "17") {
+    async function(input, btnWhtGpio = "23", btnBluGpio = "24", redGpio = "22", ylwGpio = "27", grnGpio = "17") {
         this.logger.info("Loading libraries...");
 
         await initialize();
@@ -16,9 +16,10 @@ module.exports = [
             grn: led(+grnGpio, "grn led")
         };
 
-        this.logger.info(`Initializing dht(11, ${+dhtGpio})`);
+        this.logger.info(`Initializing buttons(white=${+btnWhtGpio} blue=${+btnBluGpio})`);
 
-        const ht = dht(11, +dhtGpio)
+        const wht = button(+btnWhtGpio, "wht btn");
+        const blu = button(+btnBluGpio, "blu btn");
 
         this.logger.info("Initializing input commands");
 
@@ -36,7 +37,7 @@ module.exports = [
         // generate output
         return Object.assign(
             changes(readStreamFromSources(
-                [ht, leds.grn, leds.ylw, leds.red],
+                [wht, blu, leds.grn, leds.ylw, leds.red],
                 { platform, hostname, network }
             )),
             {topic: "pi-measurement", contentType: "text/x-ndjson"}
