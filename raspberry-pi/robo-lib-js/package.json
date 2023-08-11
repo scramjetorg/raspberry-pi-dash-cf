@@ -1,0 +1,19 @@
+{
+  "name": "@scramjet/robo-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "Budleigh Salterton <cz@scramjet.org>",
+  "license": "ISC",
+  "dependencies": {
+    "node-dht-sensor": "^0.4.3",
+    "onoff": "^6.0.3",
+    "epoll": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/node-dht-sensor": "^0.4.0"
+  }
+}

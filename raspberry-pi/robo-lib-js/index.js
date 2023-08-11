@@ -157,7 +157,7 @@ const lib = module.exports = {
      * @returns 
      */
     getCommandLineIterator(input, errorHandler = this.noop) {
-        return async function* () {
+        return (async function* () {
             for await (const message of input) {
                 try {
                     const [type, obj, value] = message.trim().split(':');
@@ -166,7 +166,7 @@ const lib = module.exports = {
                     errorHandler(e);
                 }
             }
-        }
+        })();
     },
     /**
      * Reads from multiple sources
