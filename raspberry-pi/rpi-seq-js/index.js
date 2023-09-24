@@ -1,8 +1,8 @@
-const { platform, hostname, network, led, dht, changes, initialize, readStreamFromSources, readCommandLines, getTimer, button } = require("./lib");
+const { platform, hostname, network, led, changes, initialize, readStreamFromSources, readCommandLines, getTimer, button } = require("./lib");
 
 module.exports = [
     { requires: "pi-control", contentType: "text/plain" },
-    async function(input, btnWhtGpio = "23", btnBluGpio = "24", redGpio = "22", ylwGpio = "27", grnGpio = "17") {
+    async function(input, btnWhtGpio = "23", btnBluGpio = "24", redGpio = "18", ylwGpio = "15", grnGpio = "14") {
         this.logger.info("Loading libraries...");
 
         await initialize();

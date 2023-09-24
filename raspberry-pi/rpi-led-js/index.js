@@ -1,7 +1,7 @@
 const { led, initialize, getCommandLineIterator } = require("@scramjet/robo-lib");
 
 module.exports = [
-    { requires: "pi-control", contentType: "text/plain" },
+    { requires: "pi-led", contentType: "text/plain" },
     async function(input, ...ledgpios) {
         this.logger.info("Loading libraries...");
 
